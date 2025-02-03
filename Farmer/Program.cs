@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
+using System.Linq;
 
 namespace Farmer
 {
@@ -13,12 +14,12 @@ namespace Farmer
         static void ShowHelp()
         {
             ShowBanner();
-            Console.WriteLine("farmer.exe <port> [seconds] [output]");
+            Console.WriteLine("farmer.exe <port> [seconds] [output] [--disable-ess]");
         }
         static void ParseArgs(string[] args)
         {
 
-            if (args.Length <= 3)
+            if (args.Length <= 4)
             {
                 if (args.Length == 1)
                 {
@@ -27,13 +28,30 @@ namespace Farmer
                     return;
                 }
                 
+                for (int i = 0; i < args.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(args[i]))
+                    {
+                        if (args[i].ToLower().Contains("--disable-ess")) {
+                            Config.ess = false;
+                            Console.WriteLine("[*] Disabling ESS");
+                            args = args.Where(w => w != args[i]).ToArray();
+                            if (args.Length == 1)
+                            {
+                                return;
+                            }
+                            break;
+                        }
+                    }
+                }
+
                 Config.port = int.Parse(args[0]);
                 Config.timer = int.Parse(args[1]);
 
                 Console.WriteLine("[*] Opening server on port {0}", args[0]);
                 Console.WriteLine("[*] Farming for {0} seconds", args[1]);
 
-                if (args.Length > 2)
+                if (args.Length == 3)
                 {
                     Config.output = args[2];
                     Console.WriteLine("[*] Writing output to {0}", args[2]);
@@ -43,7 +61,7 @@ namespace Farmer
         }
         static void Main(string[] args)
         {
-            if (args.Length < 1 || args.Length > 3)
+            if (args.Length < 1 || args.Length > 4)
             {
                 ShowHelp();
                 return;
