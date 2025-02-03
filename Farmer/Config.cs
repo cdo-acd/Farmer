@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -12,6 +12,7 @@ namespace Farmer
         public static StreamWriter sw;
         public static string key = "farmer";
         public static bool encrypt = false;
+        public static bool ess = true;
         public static string banner = @"
   █████▒▄▄▄       ██▀███   ███▄ ▄███▓▓█████  ██▀███  
 ▓██   ▒▒████▄    ▓██ ▒ ██▒▓██▒▀█▀ ██▒▓█   ▀ ▓██ ▒ ██▒
